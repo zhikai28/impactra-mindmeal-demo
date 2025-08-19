@@ -10,7 +10,6 @@
       background: #f9f9f9;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
     header {
       background-color: #004d26;
@@ -18,37 +17,33 @@
       padding: 20px;
       font-size: 22px;
       font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header .cart {
+      text-align: center;
       position: relative;
-      cursor: pointer;
-      font-size: 18px;
     }
-    header .cart-count {
-      background: red;
-      border-radius: 50%;
-      color: white;
-      padding: 2px 8px;
-      font-size: 14px;
+    /* Cart Dropdown */
+    .cart {
       position: absolute;
-      top: -8px;
-      right: -10px;
+      right: 20px;
+      top: 20px;
+      background: white;
+      color: #004d26;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
     }
     .cart-dropdown {
       display: none;
       position: absolute;
-      right: 0;
-      top: 35px;
+      right: 20px;
+      top: 60px;
       background: white;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      width: 220px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: left;
-      z-index: 100;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 10;
     }
     .cart-dropdown ul {
       list-style: none;
@@ -56,18 +51,15 @@
       padding: 10px;
     }
     .cart-dropdown ul li {
-      padding: 5px 0;
+      padding: 6px 0;
       border-bottom: 1px solid #eee;
+      font-size: 14px;
     }
-    .cart-dropdown button {
-      width: 100%;
-      background-color: #004d26;
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 0 0 8px 8px;
+    .cart-dropdown ul li:last-child {
+      border-bottom: none;
     }
+
+    /* Meals */
     .menu {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -81,6 +73,7 @@
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
     }
     .meal-card img {
       width: 100%;
@@ -106,23 +99,46 @@
       font-size: 16px;
       cursor: pointer;
     }
-    /* Order Tracking */
-    #tracking {
-      display: none;
-      margin: 30px auto;
+
+    /* Order Tracker */
+    .tracker {
+      max-width: 600px;
+      margin: 40px auto;
       padding: 20px;
-      max-width: 500px;
+      text-align: center;
       background: white;
       border-radius: 16px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    #tracking img {
-      max-width: 100%;
+    .progress {
+      height: 20px;
+      background: #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: #004d26;
+      transition: width 0.3s;
+    }
+    .features {
+      padding: 30px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .features h2 {
+      color: #004d26;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .features p {
+      background: white;
+      padding: 15px;
       border-radius: 12px;
       margin-bottom: 15px;
-    }
-    #tracking h2 {
-      color: #004d26;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
   </style>
 </head>
@@ -130,12 +146,11 @@
 
   <header>
     🌱 Impactra MindMeal
-    <div class="cart" onclick="toggleCart()">
-      🛒 Cart <span class="cart-count" id="cartCount">0</span>
-      <div class="cart-dropdown" id="cartDropdown">
-        <ul id="cartItems"></ul>
-        <button onclick="checkout()">Checkout</button>
-      </div>
+    <div class="cart" onclick="toggleCart()">🛒 Cart (<span id="cartCount">0</span>)</div>
+    <div class="cart-dropdown" id="cartDropdown">
+      <ul id="cartItems">
+        <li>No items added yet</li>
+      </ul>
     </div>
   </header>
 
@@ -145,7 +160,7 @@
     <div class="meal-card">
       <img src="meal1.png" alt="Nasi Lemak Ayam Berempah">
       <div class="nutrition">
-        <b>420</b> Kcal | <b>15g</b> Protein | <b>9g</b> Fiber
+        <b>710</b> Kcal | <b>20g</b> Protein | <b>9g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
       <button onclick="addToCart('Nasi Lemak Ayam Berempah')">Order Now</button>
@@ -155,7 +170,7 @@
     <div class="meal-card">
       <img src="meal2.png" alt="Rice Bowl">
       <div class="nutrition">
-        <b>350</b> Kcal | <b>10g</b> Protein | <b>12g</b> Fiber
+        <b>450</b> Kcal | <b>19g</b> Protein | <b>8g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
       <button onclick="addToCart('Rice Bowl')">Order Now</button>
@@ -165,48 +180,68 @@
     <div class="meal-card">
       <img src="meal3.png" alt="Spaghetti Aglio Olio">
       <div class="nutrition">
-        <b>500</b> Kcal | <b>18g</b> Protein | <b>7g</b> Fiber
+        <b>700</b> Kcal | <b>16g</b> Protein | <b>4g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Spaghetti Aglio Olio')">Order Now</button>
+      <button onclick="addToCart('Spaghetti Aglio Olio">
+      <div class="nutrition">
+        <b>500</b> Kcal | <b>18g</b> Protein | <b>7g</b> Fiber')">Order Now</button>
     </div>
   </div>
 
-  <!-- Tracking Section -->
-  <div id="tracking">
-    <h2>🚴 Your Order is on the Way!</h2>
-    <img src="tracking-demo.png" alt="Order Tracking Demo">
-    <p>Estimated Delivery Time: <b>25 mins</b></p>
+  <!-- Order Tracker -->
+  <div class="tracker">
+    <h2>🎯 Live Order & Impact Tracker</h2>
+    <p><span id="ordersCount">0</span> orders placed → <span id="donatedMeals">0</span> meals donated</p>
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p>Target: 10 orders (demo)</p>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features">
+    <h2>✨ Why Choose Impactra MindMeal?</h2>
+    <p><b>Personalized Meal Plans</b><br>Adaptive & healthy choices tailored to your goals.</p>
+    <p><b>Green Innovation</b><br>Eco-friendly packaging and sustainable sourcing.</p>
+    <p><b>Impact Tracker</b><br>See how your meals contribute to charity in real time.</p>
+    <p><b>Quick QR Ordering</b><br>Scan, select, and enjoy your MindMeal.</p>
+    <p><b>Live Demo Panel</b><br>Tap Demo Order to simulate an order. The progress bar grows and your impact count increases.</p>
+    <p style="font-size:14px; color:#666;">1 order = 1 donated meal | Target: 10 orders (for demo)<br>All visuals are illustrative only</p>
   </div>
 
   <script>
-    let cart = {};
+    let cart = [];
+    let orderCount = 0;
+
     function addToCart(mealName) {
-      if (cart[mealName]) {
-        cart[mealName]++;
-      } else {
-        cart[mealName] = 1;
-      }
+      cart.push(mealName);
+      orderCount++;
       updateCart();
+      updateTracker();
     }
+
     function updateCart() {
+      document.getElementById('cartCount').textContent = cart.length;
       const cartItems = document.getElementById('cartItems');
       cartItems.innerHTML = '';
-      let totalCount = 0;
-      for (let meal in cart) {
-        totalCount += cart[meal];
-        cartItems.innerHTML += `<li>${meal} x ${cart[meal]}</li>`;
-      }
-      document.getElementById('cartCount').innerText = totalCount;
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${index + 1}. ${item}`;
+        cartItems.appendChild(li);
+      });
     }
+
+    function updateTracker() {
+      document.getElementById('ordersCount').textContent = orderCount;
+      document.getElementById('donatedMeals').textContent = orderCount;
+      const progress = Math.min((orderCount / 10) * 100, 100);
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
     function toggleCart() {
       const dropdown = document.getElementById('cartDropdown');
       dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    }
-    function checkout() {
-      document.querySelector('.menu').style.display = 'none';
-      document.getElementById('tracking').style.display = 'block';
-      document.getElementById('cartDropdown').style.display = 'none';
     }
   </script>
 
