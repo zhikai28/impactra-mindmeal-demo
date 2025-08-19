@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Impactra MindMeal — App Demo</title>
+  <meta name="description" content="Demo landing page for Impactra MindMeal: Smart Meals, Smarter Impact." />
+  <meta property="og:title" content="Impactra MindMeal — App Demo" />
+  <meta property="og:description" content="Every meal nourishes you and helps feed a child in need." />
+  <meta name="theme-color" content="#0F5F3A" />
+  <style>
+    /* Reset & base */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.5;
+      color: #102016;
+      background: #f7faf8;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Brand */
+    :root{
+      --green-900:#0F5F3A;  /* dark green */
+      --green-700:#18724a;
+      --green-100:#e8f2ec;
+      --ink:#0d1b13;
+      --muted:#607068;
+      --card:#ffffff;
+      --radius:16px;
+      --shadow: 0 10px 30px rgba(15,95,58,.12);
+    }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 40;
+      backdrop-filter: blur(8px);
+      background: rgba(247,250,248,.75);
+      border-bottom: 1px solid #e6eee9;
+    }
+    .nav {
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding: 12px 24px;
+      max-width: 1100px; margin:0 auto;
+    }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:700; }
+    .brand svg { width:36px; height:36px; }
+    .tagline { font-size: 14px; color: var(--muted); }
+
+    /* Hero */
+    .hero {
+      display:grid; grid-template-columns: 1.05fr .95fr; gap:28px; align-items:center;
+      padding: 32px 0 16px;
+    }
+    .hero-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      border: 1px solid #e6eee9;
+    }
+    h1 { font-size: clamp(28px, 3vw, 40px); margin: 10px 0 8px; color: var(--ink); }
+    p.lead { margin: 0 0 16px; color: var(--muted); font-size: clamp(16px, 2vw, 18px); }
+    .cta {
+      display:flex; gap:12px; flex-wrap: wrap; margin-top: 8px;
+    }
+    .btn {
+      border: 0; cursor:pointer; padding: 12px 18px; border-radius: 999px; font-weight: 600;
+      transition: transform .04s ease, opacity .2s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.995); }
+    .btn-primary { background: var(--green-900); color: #fff; }
+    .btn-ghost { background: #e9f3ee; color: var(--green-900); }
+
+    /* Mock phone */
+    .phone {
+      border-radius: 34px; background:#fff; padding: 18px; width: 100%; aspect-ratio: 9/18; border:1px solid #e6eee9;
+      box-shadow: var(--shadow);
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .status { height: 6px; width: 40%; background:#eaeaea; border-radius: 999px; margin: 8px auto 0; }
+    .meal-card { background:#fafdfb; border:1px solid #e6eee9; border-radius: 16px; padding: 12px; }
+    .stats { display:flex; justify-content:space-between; gap:6px; margin-top:10px; font-size:13px; color:#355043; }
+    .progress { height: 8px; background:#e9f3ee; border-radius:999px; overflow:hidden; margin-top:10px; }
+    .progress > span { display:block; height:100%; width: 10%; background: var(--green-700); transition: width .2s ease; }
+
+    /* Features */
+    .features { display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin: 24px 0; }
+    .feature {
+      background: var(--card); border: 1px solid #e6eee9; border-radius: 14px; padding: 16px; box-shadow: var(--shadow);
+    }
+    .feature h3 { margin: 8px 0 4px; font-size: 16px; }
+    .feature p { margin: 0; font-size: 14px; color: var(--muted); }
+
+    /* Demo Order Panel */
+    .panel {
+      background: var(--card); border: 1px solid #e6eee9; border-radius: var(--radius);
+      padding: 18px; box-shadow: var(--shadow);
+    }
+    .panel h2 { margin: 0 0 6px; }
+    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+
+    /* Footer */
+    footer { color: var(--muted); font-size: 14px; margin: 24px 0 40px; text-align:center; }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero { grid-template-columns: 1fr; }
+      .features { grid-template-columns: repeat(2, 1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px){
+      .features { grid-template-columns: 1fr; }
+    }
+
+    /* QR hint badge */
+    .qr-hint {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size: 14px; padding:8px 12px; border-radius: 999px;
+      background: var(--green-100); color: var(--green-900);
+      border: 1px dashed var(--green-900);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand" aria-label="Impactra MindMeal">
+        <!-- Inline Bento + sprout logo (dark green) -->
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+          <rect x="6" y="10" width="36" height="28" rx="8" stroke="currentColor" stroke-width="3" color="#0F5F3A"/>
+          <path d="M12 24c6.5 0 8-7 8-7s1.5 7-5 11" stroke="#0F5F3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="31" cy="27" r="6.5" stroke="#0F5F3A" stroke-width="3"/>
+          <path d="M24 20h18" stroke="#0F5F3A" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div>IMPACTRA <span style="font-weight:600;color:var(--green-900);">MindMeal</span></div>
+          <div class="tagline">Smart Meals, Smarter Impact</div>
+        </div>
+      </div>
+      <div class="qr-hint">🔗 Demo page — use this URL as your QR target</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h1>Bento with a Purpose</h1>
+        <p class="lead">Every meal nourishes you and helps feed a child in need. Experience sustainable choices and see your impact in real time.</p>
+        <div class="cta">
+          <button class="btn btn-primary" id="btnGetStarted">Get Started</button>
+          <a class="btn btn-ghost" href="#demo">View Demo</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="phone" aria-label="App mockup">
+          <div class="status"></div>
+          <div class="meal-card">
+            <img alt="MindMeal Bento" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'><rect width='640' height='360' rx='24' fill='%23ffffff' stroke='%23e6eee9'/><rect x='24' y='24' width='592' height='312' rx='20' fill='%23f3f7f4'/><rect x='48' y='48' width='260' height='264' rx='18' fill='%23ffffff'/><rect x='332' y='48' width='260' height='120' rx='18' fill='%23ffffff'/><rect x='332' y='192' width='120' height='120' rx='18' fill='%23ffffff'/><rect x='472' y='192' width='120' height='120' rx='18' fill='%23ffffff'/><circle cx='392' cy='252' r='34' fill='%230F5F3A'/><rect x='76' y='76' width='204' height='208' rx='14' fill='%23e9f3ee'/><rect x='356' y='76' width='212' height='64' rx='14' fill='%23e9f3ee'/><rect x='356' y='220' width='64' height='64' rx='14' fill='%23e9f3ee'/><rect x='496' y='220' width='64' height='64' rx='14' fill='%23e9f3ee'/></svg>" />
+            <div class="stats">
+              <div><strong id="kcal">420</strong> Kcal</div>
+              <div><strong id="protein">15g</strong> Protein</div>
+              <div><strong id="fiber">9g</strong> Fiber</div>
+            </div>
+            <div class="progress" aria-label="Donation progress">
+              <span id="bar" style="width:10%"></span>
+            </div>
+            <div style="margin-top:8px; font-size: 13px; color:#355043;">
+              <span id="orders">1</span> Meal Ordered → <span id="donations">1</span> Meal Donated
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btnOrder" style="margin-top:16px;">Demo Order</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features" aria-label="Key features">
+      <div class="feature">
+        <h3>Personalized Meal Plans</h3>
+        <p>Adaptive & healthy choices tailored to your goals.</p>
+      </div>
+      <div class="feature">
+        <h3>Green Innovation</h3>
+        <p>Eco-friendly packaging and sustainable sourcing.</p>
+      </div>
+      <div class="feature">
+        <h3>Impact Tracker</h3>
+        <p>See how your meals contribute to charity in real time.</p>
+      </div>
+      <div class="feature">
+        <h3>Quick QR Ordering</h3>
+        <p>Scan, select, and enjoy your MindMeal.</p>
+      </div>
+    </section>
+
+    <section class="panel grid-2" id="demo">
+      <div>
+        <h2>Live Demo Panel</h2>
+        <p>Tap <em>Demo Order</em> to simulate an order. The progress bar grows and your impact count increases.</p>
+        <ul>
+          <li>1 order = 1 donated meal</li>
+          <li>Target: 10 orders (for demo)</li>
+          <li>All visuals are illustrative only</li>
+        </ul>
+      </div>
+      <div>
+        <h2>How to Use for Your QR</h2>
+        <ol>
+          <li>Host this HTML file on GitHub Pages, Netlify, or Vercel.</li>
+          <li>Copy the hosted URL.</li>
+          <li>Set the QR code’s target to that URL.</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Impactra MindMeal. Demo for proposals. • Powered by Impactra
+    </footer>
+  </main>
+
+  <script>
+    // Simple interactivity for the demo
+    (function(){
+      const ordersEl = document.getElementById('orders');
+      const donationsEl = document.getElementById('donations');
+      const bar = document.getElementById('bar');
+      const btnOrder = document.getElementById('btnOrder');
+      const btnGetStarted = document.getElementById('btnGetStarted');
+      const yearEl = document.getElementById('year');
+      yearEl.textContent = new Date().getFullYear();
+
+      let orders = 1;
+      let target = 10;
+
+      function redraw(){
+        ordersEl.textContent = orders.toString();
+        donationsEl.textContent = orders.toString();
+        const pct = Math.min(100, Math.round((orders/target)*100));
+        bar.style.width = pct + '%';
+      }
+
+      btnOrder.addEventListener('click', function(){
+        orders += 1;
+        redraw();
+      });
+
+      btnGetStarted.addEventListener('click', function(){
+        document.getElementById('demo').scrollIntoView({behavior:'smooth'});
+      });
+
+      redraw();
+    })();
+  </script>
+</body>
+</html>
