@@ -86,6 +86,7 @@
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
     }
 
     .meal-card img {
@@ -248,76 +249,56 @@
   <!-- Menu Section -->
   <div class="menu">
     <!-- Meal 1 -->
-    <div class="meal-card">
+    <div class="meal-card" onclick="selectMeal(710, 20, 9)">
       <img src="meal1.png" alt="Nasi Lemak Ayam Berempah">
       <div class="nutrition">
         <b>710</b> Kcal &nbsp; | &nbsp; <b>20g</b> Protein &nbsp; | &nbsp; <b>9g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Nasi Lemak Ayam Berempah', 710, 20, 9)">Order Now</button>
     </div>
 
     <!-- Meal 2 -->
-    <div class="meal-card">
+    <div class="meal-card" onclick="selectMeal(450, 19, 8)">
       <img src="meal2.png" alt="Rice Bowl">
       <div class="nutrition">
         <b>450</b> Kcal &nbsp; | &nbsp; <b>19g</b> Protein &nbsp; | &nbsp; <b>8g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Rice Bowl', 450, 19, 8)">Order Now</button>
     </div>
 
     <!-- Meal 3 -->
-    <div class="meal-card">
+    <div class="meal-card" onclick="selectMeal(700, 16, 4)">
       <img src="meal3.png" alt="Spaghetti Aglio Olio">
       <div class="nutrition">
         <b>700</b> Kcal &nbsp; | &nbsp; <b>16g</b> Protein &nbsp; | &nbsp; <b>4g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Spaghetti Aglio Olio', 700, 16, 4)">Order Now</button>
     </div>
   </div>
 
-  <!-- Live Demo Panel -->
-  <div class="demo-panel">
-    <h2>✨ Features</h2>
-    <div class="features">
-      <div class="feature">
-        <h3>Personalized Meal Plans</h3>
-        <p>Adaptive & healthy choices tailored to your goals.</p>
-      </div>
-      <div class="feature">
-        <h3>Green Innovation</h3>
-        <p>Eco-friendly packaging and sustainable sourcing.</p>
-      </div>
-      <div class="feature">
-        <h3>Impact Tracker</h3>
-        <p>See how your meals contribute to charity in real time.</p>
-      </div>
-      <div class="feature">
-        <h3>Quick QR Ordering</h3>
-        <p>Scan, select, and enjoy your MindMeal.</p>
-      </div>
+  <!-- Updated Order Panel -->
+  <div class="order-panel">
+    <h1>Bento with a Purpose</h1>
+    <p>Every meal nourishes you and helps feed a child in need. Experience sustainable choices and see your impact in real time.</p>
+    
+    <div class="stats">
+      <div><strong id="kcal">0</strong> Kcal</div>
+      <div><strong id="protein">0g</strong> Protein</div>
+      <div><strong id="fiber">0g</strong> Fiber</div>
     </div>
-    <h2>Live Demo Panel</h2>
-    <p>Tap <strong>Demo Order</strong> to simulate an order. The progress bar grows and your impact count increases.</p>
-    <ul>
-      <li><strong>1 order = 1 donated meal</strong></li>
-      <li><strong>Target:</strong> 10 orders (for demo)</li>
-      <li>All visuals are illustrative only</li>
-    </ul>
 
-    <h3>How to Use for Your QR</h3>
-    <ol>
-      <li>Host this HTML file on GitHub Pages, Netlify, or Vercel.</li>
-      <li>Copy the hosted URL.</li>
-      <li>Set the QR code’s target to that URL.</li>
-    </ol>
+    <div class="progress">
+      <span id="bar"></span>
+    </div>
+
+    <div>1 Meal Ordered → 1 Meal Donated</div>
+    
+    <button id="btnOrder" onclick="demoOrder()">Demo Order</button>
   </div>
 
-  <footer>
-    © 2025 Impactra MindMeal. Demo for proposals. • Powered by Impactra
-  </footer>
+  <div class="qr-hint">
+    🔗 Demo page — use this URL as your QR target
+  </div>
 
   <script>
     let totalKcal = 0;
@@ -326,7 +307,7 @@
     let orders = 0;
     let target = 10;
 
-    function addToCart(mealName, kcal, protein, fiber) {
+    function selectMeal(kcal, protein, fiber) {
       totalKcal += kcal;
       totalProtein += protein;
       totalFiber += fiber;
