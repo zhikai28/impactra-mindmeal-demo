@@ -22,15 +22,51 @@
       justify-content: space-between;
       align-items: center;
     }
-    .cart {
+    header .cart {
+      position: relative;
+      cursor: pointer;
       font-size: 18px;
+    }
+    header .cart-count {
+      background: red;
+      border-radius: 50%;
+      color: white;
+      padding: 2px 8px;
+      font-size: 14px;
+      position: absolute;
+      top: -8px;
+      right: -10px;
+    }
+    .cart-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 35px;
       background: white;
-      color: #004d26;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      cursor: default;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 220px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: left;
+      z-index: 100;
+    }
+    .cart-dropdown ul {
+      list-style: none;
+      margin: 0;
+      padding: 10px;
+    }
+    .cart-dropdown ul li {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cart-dropdown button {
+      width: 100%;
+      background-color: #004d26;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 0 0 8px 8px;
     }
     .menu {
       display: grid;
@@ -45,15 +81,9 @@
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-    .meal-card:hover {
-      transform: scale(1.03);
     }
     .meal-card img {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
       border-radius: 16px;
       margin-bottom: 12px;
     }
@@ -76,55 +106,23 @@
       font-size: 16px;
       cursor: pointer;
     }
-    .meal-card button:hover {
-      background-color: #007a3d;
-    }
-
-    /* Modal Styling */
-    .modal {
+    /* Order Tracking */
+    #tracking {
       display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
+      margin: 30px auto;
+      padding: 20px;
+      max-width: 500px;
       background: white;
-      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    #tracking img {
+      max-width: 100%;
       border-radius: 12px;
-      text-align: center;
-      max-width: 300px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      animation: pop 0.3s ease;
+      margin-bottom: 15px;
     }
-    @keyframes pop {
-      from { transform: scale(0.7); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    .modal-content h2 {
-      margin: 0 0 10px;
-      font-size: 20px;
+    #tracking h2 {
       color: #004d26;
-    }
-    .modal-content p {
-      font-size: 15px;
-      margin-bottom: 20px;
-    }
-    .modal-content button {
-      background: #004d26;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .modal-content button:hover {
-      background: #007a3d;
     }
   </style>
 </head>
@@ -132,72 +130,83 @@
 
   <header>
     🌱 Impactra MindMeal
-    <div class="cart">🛒 My Orders: <span id="cartCount">0</span></div>
+    <div class="cart" onclick="toggleCart()">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      <div class="cart-dropdown" id="cartDropdown">
+        <ul id="cartItems"></ul>
+        <button onclick="checkout()">Checkout</button>
+      </div>
+    </div>
   </header>
 
   <!-- Menu Section -->
   <div class="menu">
     <!-- Meal 1 -->
     <div class="meal-card">
-      <img src="meal1.png" alt="Nasi Lemak Ayam Berempah" 
-           onerror="this.src='https://images.unsplash.com/photo-1604908177330-4e7e453a21d2?auto=format&fit=crop&w=600&q=80'">
+      <img src="meal1.png" alt="Nasi Lemak Ayam Berempah">
       <div class="nutrition">
-        <b>420</b> Kcal &nbsp; | &nbsp; <b>15g</b> Protein &nbsp; | &nbsp; <b>9g</b> Fiber
+        <b>420</b> Kcal | <b>15g</b> Protein | <b>9g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="orderMeal('Nasi Lemak Ayam Berempah')">Order Now</button>
+      <button onclick="addToCart('Nasi Lemak Ayam Berempah')">Order Now</button>
     </div>
 
     <!-- Meal 2 -->
     <div class="meal-card">
-      <img src="meal2.png" alt="Healthy Bento" 
-           onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80'">
+      <img src="meal2.png" alt="Rice Bowl">
       <div class="nutrition">
-        <b>350</b> Kcal &nbsp; | &nbsp; <b>10g</b> Protein &nbsp; | &nbsp; <b>12g</b> Fiber
+        <b>350</b> Kcal | <b>10g</b> Protein | <b>12g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="orderMeal('Healthy Bento')">Order Now</button>
+      <button onclick="addToCart('Rice Bowl')">Order Now</button>
     </div>
 
     <!-- Meal 3 -->
     <div class="meal-card">
-      <img src="meal3.png" alt="Spaghetti Aglio Olio" 
-           onerror="this.src='https://images.unsplash.com/photo-1627308595183-8d115d9d8f94?auto=format&fit=crop&w=600&q=80'">
+      <img src="meal3.png" alt="Spaghetti Aglio Olio">
       <div class="nutrition">
-        <b>500</b> Kcal &nbsp; | &nbsp; <b>18g</b> Protein &nbsp; | &nbsp; <b>7g</b> Fiber
+        <b>500</b> Kcal | <b>18g</b> Protein | <b>7g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="orderMeal('Spaghetti Aglio Olio')">Order Now</button>
+      <button onclick="addToCart('Spaghetti Aglio Olio')">Order Now</button>
     </div>
   </div>
 
-  <!-- Modal -->
-  <div id="orderModal" class="modal">
-    <div class="modal-content">
-      <h2>✅ Order Successful</h2>
-      <p id="orderText">Your meal has been added!</p>
-      <button onclick="closeModal()">Close</button>
-    </div>
+  <!-- Tracking Section -->
+  <div id="tracking">
+    <h2>🚴 Your Order is on the Way!</h2>
+    <img src="tracking-demo.png" alt="Order Tracking Demo">
+    <p>Estimated Delivery Time: <b>25 mins</b></p>
   </div>
 
   <script>
-    let cartCount = 0;
-
-    function orderMeal(mealName) {
-      cartCount++;
-      document.getElementById("cartCount").innerText = cartCount;
-      document.getElementById("orderText").innerText = mealName + " has been added to your order!";
-      document.getElementById("orderModal").style.display = "flex";
-    }
-
-    function closeModal() {
-      document.getElementById("orderModal").style.display = "none";
-    }
-
-    window.onclick = function(event) {
-      if (event.target == document.getElementById("orderModal")) {
-        closeModal();
+    let cart = {};
+    function addToCart(mealName) {
+      if (cart[mealName]) {
+        cart[mealName]++;
+      } else {
+        cart[mealName] = 1;
       }
+      updateCart();
+    }
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+      let totalCount = 0;
+      for (let meal in cart) {
+        totalCount += cart[meal];
+        cartItems.innerHTML += `<li>${meal} x ${cart[meal]}</li>`;
+      }
+      document.getElementById('cartCount').innerText = totalCount;
+    }
+    function toggleCart() {
+      const dropdown = document.getElementById('cartDropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+    function checkout() {
+      document.querySelector('.menu').style.display = 'none';
+      document.getElementById('tracking').style.display = 'block';
+      document.getElementById('cartDropdown').style.display = 'none';
     }
   </script>
 
