@@ -10,6 +10,7 @@
       background: #f9f9f9;
       margin: 0;
       padding: 0;
+      text-align: center;
     }
     header {
       background-color: #004d26;
@@ -17,38 +18,42 @@
       padding: 20px;
       font-size: 22px;
       font-weight: bold;
-      text-align: center;
-      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    /* Cart Dropdown */
     .cart {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      background: white;
-      color: #004d26;
-      padding: 10px 16px;
-      border-radius: 8px;
+      position: relative;
       cursor: pointer;
       font-size: 16px;
-      font-weight: bold;
+    }
+    .cart-count {
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+      position: absolute;
+      top: -8px;
+      right: -10px;
     }
     .cart-dropdown {
       display: none;
       position: absolute;
-      right: 20px;
-      top: 60px;
+      top: 30px;
+      right: 0;
       background: white;
       border: 1px solid #ddd;
-      border-radius: 10px;
-      width: 250px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 200px;
+      text-align: left;
       z-index: 10;
     }
     .cart-dropdown ul {
       list-style: none;
-      margin: 0;
       padding: 10px;
+      margin: 0;
     }
     .cart-dropdown ul li {
       padding: 6px 0;
@@ -58,8 +63,6 @@
     .cart-dropdown ul li:last-child {
       border-bottom: none;
     }
-
-    /* Meals */
     .menu {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -73,7 +76,6 @@
       border-radius: 16px;
       padding: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: center;
     }
     .meal-card img {
       width: 100%;
@@ -99,46 +101,21 @@
       font-size: 16px;
       cursor: pointer;
     }
-
-    /* Order Tracker */
-    .tracker {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 20px;
-      text-align: center;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .progress {
-      height: 20px;
-      background: #ddd;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-    .progress-bar {
-      height: 100%;
-      width: 0;
-      background: #004d26;
-      transition: width 0.3s;
-    }
     .features {
-      padding: 30px;
-      max-width: 900px;
-      margin: auto;
+      background: #fff;
+      padding: 40px;
+      text-align: left;
+      max-width: 800px;
+      margin: 30px auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
     .features h2 {
       color: #004d26;
-      text-align: center;
-      margin-bottom: 20px;
     }
     .features p {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      font-size: 15px;
+      margin-bottom: 12px;
     }
   </style>
 </head>
@@ -146,11 +123,13 @@
 
   <header>
     🌱 Impactra MindMeal
-    <div class="cart" onclick="toggleCart()">🛒 Cart (<span id="cartCount">0</span>)</div>
-    <div class="cart-dropdown" id="cartDropdown">
-      <ul id="cartItems">
-        <li>No items added yet</li>
-      </ul>
+    <div class="cart" onclick="toggleCart()">
+      🛒 Cart <span id="cart-count" class="cart-count">0</span>
+      <div class="cart-dropdown" id="cart-dropdown">
+        <ul id="cart-items">
+          <li>Your cart is empty.</li>
+        </ul>
+      </div>
     </div>
   </header>
 
@@ -160,7 +139,7 @@
     <div class="meal-card">
       <img src="meal1.png" alt="Nasi Lemak Ayam Berempah">
       <div class="nutrition">
-        <b>710</b> Kcal | <b>20g</b> Protein | <b>9g</b> Fiber
+        <b>710</b> Kcal &nbsp; | &nbsp; <b>20g</b> Protein &nbsp; | &nbsp; <b>9g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
       <button onclick="addToCart('Nasi Lemak Ayam Berempah')">Order Now</button>
@@ -170,7 +149,7 @@
     <div class="meal-card">
       <img src="meal2.png" alt="Rice Bowl">
       <div class="nutrition">
-        <b>450</b> Kcal | <b>19g</b> Protein | <b>8g</b> Fiber
+        <b>450</b> Kcal &nbsp; | &nbsp; <b>19g</b> Protein &nbsp; | &nbsp; <b>8g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
       <button onclick="addToCart('Rice Bowl')">Order Now</button>
@@ -180,68 +159,56 @@
     <div class="meal-card">
       <img src="meal3.png" alt="Spaghetti Aglio Olio">
       <div class="nutrition">
-        <b>700</b> Kcal | <b>16g</b> Protein | <b>4g</b> Fiber
+        <b>700</b> Kcal &nbsp; | &nbsp; <b>16g</b> Protein &nbsp; | &nbsp; <b>4g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Spaghetti Aglio Olio">
-      <div class="nutrition">
-        <b>500</b> Kcal | <b>18g</b> Protein | <b>7g</b> Fiber')">Order Now</button>
+      <button onclick="addToCart('Spaghetti Aglio Olio')">Order Now</button>
     </div>
-  </div>
-
-  <!-- Order Tracker -->
-  <div class="tracker">
-    <h2>🎯 Live Order & Impact Tracker</h2>
-    <p><span id="ordersCount">0</span> orders placed → <span id="donatedMeals">0</span> meals donated</p>
-    <div class="progress">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-    <p>Target: 10 orders (demo)</p>
   </div>
 
   <!-- Features Section -->
   <div class="features">
-    <h2>✨ Why Choose Impactra MindMeal?</h2>
-    <p><b>Personalized Meal Plans</b><br>Adaptive & healthy choices tailored to your goals.</p>
-    <p><b>Green Innovation</b><br>Eco-friendly packaging and sustainable sourcing.</p>
-    <p><b>Impact Tracker</b><br>See how your meals contribute to charity in real time.</p>
-    <p><b>Quick QR Ordering</b><br>Scan, select, and enjoy your MindMeal.</p>
-    <p><b>Live Demo Panel</b><br>Tap Demo Order to simulate an order. The progress bar grows and your impact count increases.</p>
-    <p style="font-size:14px; color:#666;">1 order = 1 donated meal | Target: 10 orders (for demo)<br>All visuals are illustrative only</p>
+    <h2>✨ Features</h2>
+    <p><b>Personalized Meal Plans</b> — Adaptive & healthy choices tailored to your goals.</p>
+    <p><b>Green Innovation</b> — Eco-friendly packaging and sustainable sourcing.</p>
+    <p><b>Impact Tracker</b> — See how your meals contribute to charity in real time.</p>
+    <p><b>Quick QR Ordering</b> — Scan, select, and enjoy your MindMeal.</p>
+    <p><b>Live Demo Panel</b> — Tap Demo Order to simulate an order. The progress bar grows and your impact count increases.</p>
+    <hr>
+    <p>1 order = 1 donated meal</p>
+    <p><b>Target:</b> 10 orders (for demo)</p>
+    <p><i>All visuals are illustrative only</i></p>
+    <h3>How to Use for Your QR</h3>
+    <ol>
+      <li>Host this HTML file on GitHub Pages, Netlify, or Vercel.</li>
+      <li>Copy the hosted URL.</li>
+      <li>Set the QR code’s target to that URL.</li>
+    </ol>
   </div>
 
   <script>
     let cart = [];
-    let orderCount = 0;
-
-    function addToCart(mealName) {
-      cart.push(mealName);
-      orderCount++;
+    function addToCart(meal) {
+      cart.push(meal);
       updateCart();
-      updateTracker();
     }
-
     function updateCart() {
-      document.getElementById('cartCount').textContent = cart.length;
-      const cartItems = document.getElementById('cartItems');
-      cartItems.innerHTML = '';
-      cart.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.textContent = `${index + 1}. ${item}`;
-        cartItems.appendChild(li);
-      });
+      document.getElementById('cart-count').textContent = cart.length;
+      const cartItems = document.getElementById('cart-items');
+      cartItems.innerHTML = "";
+      if (cart.length === 0) {
+        cartItems.innerHTML = "<li>Your cart is empty.</li>";
+      } else {
+        cart.forEach(item => {
+          let li = document.createElement("li");
+          li.textContent = item;
+          cartItems.appendChild(li);
+        });
+      }
     }
-
-    function updateTracker() {
-      document.getElementById('ordersCount').textContent = orderCount;
-      document.getElementById('donatedMeals').textContent = orderCount;
-      const progress = Math.min((orderCount / 10) * 100, 100);
-      document.getElementById('progressBar').style.width = progress + '%';
-    }
-
     function toggleCart() {
-      const dropdown = document.getElementById('cartDropdown');
-      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      const dropdown = document.getElementById('cart-dropdown');
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     }
   </script>
 
