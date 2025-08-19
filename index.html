@@ -180,6 +180,49 @@
       border: 1px dashed #004d26;
     }
 
+    /* Live Demo Panel */
+    .demo-panel {
+      background-color: #f4fdf8;
+      padding: 30px;
+      border-radius: 16px;
+      margin: 30px auto;
+      max-width: 1000px;
+      text-align: left;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-panel h2 {
+      color: #004d26;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .demo-panel .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .feature {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 220px;
+      text-align: left;
+    }
+
+    .feature h3 {
+      color: #004d26;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      color: #666;
+    }
+
     footer {
       color: #666;
       font-size: 14px;
@@ -211,7 +254,7 @@
         <b>710</b> Kcal &nbsp; | &nbsp; <b>20g</b> Protein &nbsp; | &nbsp; <b>9g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Nasi Lemak Ayam Berempah')">Order Now</button>
+      <button onclick="addToCart('Nasi Lemak Ayam Berempah', 710, 20, 9)">Order Now</button>
     </div>
 
     <!-- Meal 2 -->
@@ -221,7 +264,7 @@
         <b>450</b> Kcal &nbsp; | &nbsp; <b>19g</b> Protein &nbsp; | &nbsp; <b>8g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Rice Bowl')">Order Now</button>
+      <button onclick="addToCart('Rice Bowl', 450, 19, 8)">Order Now</button>
     </div>
 
     <!-- Meal 3 -->
@@ -231,55 +274,84 @@
         <b>700</b> Kcal &nbsp; | &nbsp; <b>16g</b> Protein &nbsp; | &nbsp; <b>4g</b> Fiber
       </div>
       <p class="donation">1 Meal Ordered → 1 Meal Donated</p>
-      <button onclick="addToCart('Spaghetti Aglio Olio')">Order Now</button>
+      <button onclick="addToCart('Spaghetti Aglio Olio', 700, 16, 4)">Order Now</button>
     </div>
   </div>
 
-  <!-- Updated Order Panel -->
-  <div class="order-panel">
-    <h1>Bento with a Purpose</h1>
-    <p>Every meal nourishes you and helps feed a child in need. Experience sustainable choices and see your impact in real time.</p>
-    
-    <div class="stats">
-      <div><strong id="kcal">420</strong> Kcal</div>
-      <div><strong id="protein">15g</strong> Protein</div>
-      <div><strong id="fiber">9g</strong> Fiber</div>
+  <!-- Live Demo Panel -->
+  <div class="demo-panel">
+    <h2>✨ Features</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Personalized Meal Plans</h3>
+        <p>Adaptive & healthy choices tailored to your goals.</p>
+      </div>
+      <div class="feature">
+        <h3>Green Innovation</h3>
+        <p>Eco-friendly packaging and sustainable sourcing.</p>
+      </div>
+      <div class="feature">
+        <h3>Impact Tracker</h3>
+        <p>See how your meals contribute to charity in real time.</p>
+      </div>
+      <div class="feature">
+        <h3>Quick QR Ordering</h3>
+        <p>Scan, select, and enjoy your MindMeal.</p>
+      </div>
     </div>
+    <h2>Live Demo Panel</h2>
+    <p>Tap <strong>Demo Order</strong> to simulate an order. The progress bar grows and your impact count increases.</p>
+    <ul>
+      <li><strong>1 order = 1 donated meal</strong></li>
+      <li><strong>Target:</strong> 10 orders (for demo)</li>
+      <li>All visuals are illustrative only</li>
+    </ul>
 
-    <div class="progress">
-      <span id="bar"></span>
-    </div>
-
-    <div>1 Meal Ordered → 1 Meal Donated</div>
-    
-    <button id="btnOrder" onclick="demoOrder()">Demo Order</button>
+    <h3>How to Use for Your QR</h3>
+    <ol>
+      <li>Host this HTML file on GitHub Pages, Netlify, or Vercel.</li>
+      <li>Copy the hosted URL.</li>
+      <li>Set the QR code’s target to that URL.</li>
+    </ol>
   </div>
 
-  <div class="qr-hint">
-    🔗 Demo page — use this URL as your QR target
-  </div>
+  <footer>
+    © 2025 Impactra MindMeal. Demo for proposals. • Powered by Impactra
+  </footer>
 
   <script>
-    let orders = 1;
+    let totalKcal = 0;
+    let totalProtein = 0;
+    let totalFiber = 0;
+    let orders = 0;
     let target = 10;
 
-    function demoOrder() {
+    function addToCart(mealName, kcal, protein, fiber) {
+      totalKcal += kcal;
+      totalProtein += protein;
+      totalFiber += fiber;
       orders += 1;
+
       updateProgress();
     }
 
     function updateProgress() {
-      const bar = document.getElementById("bar");
       const kcal = document.getElementById("kcal");
       const protein = document.getElementById("protein");
       const fiber = document.getElementById("fiber");
+      const bar = document.getElementById("bar");
 
-      kcal.textContent = 420 + orders * 10;
-      protein.textContent = 15 + orders * 0.5 + "g";
-      fiber.textContent = 9 + orders * 0.2 + "g";
+      kcal.textContent = totalKcal;
+      protein.textContent = totalProtein + "g";
+      fiber.textContent = totalFiber + "g";
 
       const pct = Math.min(100, Math.round((orders / target) * 100));
       bar.style.width = pct + "%";
+    }
+
+    function demoOrder() {
+      orders += 1;
+      updateProgress();
     }
   </script>
 
